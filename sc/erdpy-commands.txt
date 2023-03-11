@@ -1,0 +1,6 @@
+erdpy contract build contribute
+erdpy --verbose contract deploy --project=contribute --pem contribute/output/wallet.pem --gas-limit=50000000 --proxy https://devnet-gateway.elrond.com --chain D --outfile="counter.json" --recall-nonce --send
+erdpy --verbose contract call erd1qqqqqqqqqqqqqpgq7qmwhq046rmtrwzdwlp8nt89txs6u68wu5ms2y83v5 --pem contribute/output/wallet.pem --gas-limit=10000000 --function="fund_issuer" --chain D --proxy="https://devnet-gateway.multiversx.com" --value 500000000000000000 --recall-nonce --send --arguments 2
+erdpy --verbose contract call erd1qqqqqqqqqqqqqpgq7qmwhq046rmtrwzdwlp8nt89txs6u68wu5ms2y83v5 --pem contribute/output/wallet.pem --gas-limit=10000000 --function="register_issue" --chain D --proxy="https://devnet-gateway.multiversx.com" --recall-nonce --send --arguments 1 2 100000000000000000
+erdpy --verbose contract call erd1qqqqqqqqqqqqqpgq7qmwhq046rmtrwzdwlp8nt89txs6u68wu5ms2y83v5 --pem contribute/output/wallet.pem --gas-limit=10000000 --function="register_hunter" --chain D --proxy="https://devnet-gateway.multiversx.com" --recall-nonce --send --arguments 3
+erdpy --verbose contract call erd1qqqqqqqqqqqqqpgq7qmwhq046rmtrwzdwlp8nt89txs6u68wu5ms2y83v5 --pem contribute/output/wallet.pem --gas-limit=10000000 --function="claim_bounty" --chain D --proxy="https://devnet-gateway.multiversx.com" --recall-nonce --send --arguments 1 3
