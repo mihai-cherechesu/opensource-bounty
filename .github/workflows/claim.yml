@@ -1,0 +1,48 @@
+name: Claim CI on PR closed
+
+on:
+  pull_request:
+    branches:
+      - main
+    types: [closed]
+
+jobs:
+  commented_grant:
+      name: Grant the bounty
+      if: ${{ github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true }}
+      runs-on: ubuntu-latest
+      container: 
+        image: paravirtualtishu/mxpy:latest
+        env:
+          GITHUB_USER: ${{ github.event.pull_request.user.login }}
+          GITHUB_ISSUE_HREF: ${{ github.event.pull_request._links.issue }}
+
+      steps:
+        - name: Store pem in variable
+          shell: bash
+          run: |
+            echo "$GITHUB_PEM_SECRET_KEY"
+            echo "GITHUB_PEM_SECRET_KEY=${GITHUB_USER^^}_PEM_SECRET" >>${GITHUB_ENV}
+
+        - name: Grant bounty
+          shell: bash
+          env:
+            GITHUB_CONTEXT: ${{ toJson(github) }}
+          if: ${{ steps.exact_match.outputs.match != '' && github.event.comment.user.login == github.event.issue.user.login }}
+          run: |
+            sudo apt install -y curl jq
+            issue_id=$(curl --silent "$GITHUB_ISSUE_HREF" | jq '.id')
+            issuer_id=$(curl --silent "$GITHUB_ISSUE_HREF" | jq -r '.user.login')
+            echo "${{ secrets[env.GITHUB_PEM_SECRET_KEY] }}" > key.pem
+            issue_id_hex=$(echo -n $issue_id | od -A n -t x1 | sed 's/ *//g' | tr -d '\n')
+            issuer_id_hex=$(echo -n $issuer_id | od -A n -t x1 | sed 's/ *//g' | tr -d '\n')
+
+            mxpy --verbose contract call erd1qqqqqqqqqqqqqpgq6k3ujmztmpj4kz0660u237lwnvcc7tlqu5msppanh7 \
+              --pem key.pem \
+              --gas-limit=10000000 \
+              --function="claim_bounty" \
+              --chain D \
+              --proxy="https://devnet-gateway.multiversx.com" \
+              --recall-nonce \
+              --send \
+              --arguments 0x"$issue_id_hex" 0x"$issuer_id_hex"
