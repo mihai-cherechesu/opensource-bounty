@@ -1,0 +1,11 @@
+[package]
+name = "contribute-meta"
+version = "0.0.0"
+edition = "2021"
+publish = false
+
+[dependencies.contribute]
+path = ".."
+
+[dependencies.multiversx-sc-meta]
+version = "0.39.5"
