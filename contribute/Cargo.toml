@@ -1,0 +1,15 @@
+[package]
+name = "contribute"
+version = "0.0.0"
+authors = ["Mihai Cherechesu <mihai.cherechesu@gmail.com>"]
+edition = "2021"
+publish = false
+
+[lib]
+path = "src/contribute.rs"
+
+[dependencies.multiversx-sc]
+version = "0.39.5"
+
+[dev-dependencies.multiversx-sc-scenario]
+version = "0.39.5"
