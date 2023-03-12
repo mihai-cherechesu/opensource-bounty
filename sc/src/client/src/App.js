@@ -8,6 +8,7 @@ import { Card, Spacer, Button, Text, Container } from "@nextui-org/react"
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import Home from './Home';
 import Login from './Login';
+import { PageNotFound } from './PageNotFound';
 
 const CLIENT_ID = "76cfd539e20fe2120972";
 
@@ -116,6 +117,7 @@ function App() {
           path="/login"
           element={<Login />}
         />
+        <Route path='*' element={<PageNotFound />} />
       </Routes>
     </Router>
   );
